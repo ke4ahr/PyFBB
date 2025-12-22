@@ -1,0 +1,29 @@
+# Copyright (C) 2025-2026 Kris Kirby, KE4AHR
+# SPDX-License-Identifier: LGPL-3.0-or-later
+
+[build-system]
+requires = ["setuptools>=61.0", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pyfbb"
+version = "0.1.0"
+description = "Pure Python implementation of the F6FBB packet radio BBS forwarding protocol"
+readme = "README.md"
+authors = [{name = "Kris Kirby", email = "ke4ahr@example.com"}]
+license = {text = "LGPL-3.0-or-later"}
+classifiers = [
+    "Programming Language :: Python :: 3",
+    "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+    "Operating System :: OS Independent",
+    "Topic :: Communications :: Ham Radio",
+    "Development Status :: 4 - Beta",
+]
+keywords = ["fbb", "packet radio", "bbs", "amateur radio", "lzhuf"]
+requires-python = ">=3.8"
+dependencies = []
+
+[project.urls]
+Homepage = "https://github.com/ke4ahr/pyfbb"
+Repository = "https://github.com/ke4ahr/pyfbb"
+Issues = "https://github.com/ke4ahr/pyfbb/issues"

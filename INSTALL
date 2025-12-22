@@ -1,0 +1,6 @@
+git clone https://github.com/ke4ahr/pyfbb.git
+cd pyfbb
+python -m venv .venv
+source .venv/bin/activate
+pip install -e .
+pytest tests/
