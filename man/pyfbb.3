@@ -1,0 +1,42 @@
+.\" Man page for PyFBB library
+.TH PYFBB 3 "December 22, 2025" "PyFBB 0.1.0" "Python Library Functions"
+.SH NAME
+pyfbb \- Python library for F6FBB packet radio BBS forwarding protocol
+.SH SYNOPSIS
+.B import pyfbb
+.br
+.B from pyfbb import FBBForwarder
+.br
+.B from pyfbb.fbb.lzhuf import LZHUF_Comp
+.SH DESCRIPTION
+.B PyFBB
+is a pure-Python library implementing the classic F6FBB packet radio BBS forwarding protocol.
+.PP
+It supports:
+.RS
+.IP \(bu
+ASCII and binary forwarding modes
+.IP \(bu
+Authentic LZHUF compression
+.IP \(bu
+Reverse forwarding (FR command)
+.IP \(bu
+Multiple transports: direct TCP, AGWPE, KISS/XKISS (serial or TCP)
+.RE
+.PP
+The library is designed for integration into amateur radio packet applications.
+.SH CLASSES
+.TP
+.B FBBForwarder
+Main class for performing forwarding sessions (client or server).
+.TP
+.B LZHUF_Comp
+LZHUF compression/decompression as used in original FBB.
+.SH EXAMPLES
+See the examples/ directory or the project README for usage examples.
+.SH SEE ALSO
+.BR pyfbb (1) " (if a CLI tool exists)"
+.br
+AGWPE documentation, AX.25 protocol specifications.
+.SH AUTHOR
+Kris Kirby, KE4AHR
