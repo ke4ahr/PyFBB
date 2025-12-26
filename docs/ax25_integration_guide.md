@@ -1,6 +1,3 @@
------
-docs/ax25_integration_guide.md
------
 
 # AX.25 Integration Guide for PyFBB
 
