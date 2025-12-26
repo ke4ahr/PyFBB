@@ -1,76 +1,92 @@
+% docs/ax25_integration_guide.tex
 \documentclass{article}
 \usepackage[margin=1in]{geometry}
 \usepackage{listings}
-\usepackage{xcolor}
+\usepackage{color}
 
-\lstset{
-  basicstyle=\ttfamily\small,
-  breaklines=true,
-  frame=single,
-  backgroundcolor=\color{gray!10}
+\definecolor{codegreen}{rgb}{0,0.6,0}
+\definecolor{codegray}{rgb}{0.5,0.5,0.5}
+\definecolor{codepurple}{rgb}{0.58,0,0.82}
+\definecolor{backcolour}{rgb}{0.95,0.95,0.92}
+
+\lstdefinestyle{mystyle}{
+    backgroundcolor=\color{backcolour},   
+    commentstyle=\color{codegreen},
+    keywordstyle=\color{magenta},
+    numberstyle=\tiny\color{codegray},
+    stringstyle=\color{codepurple},
+    basicstyle=\ttfamily\footnotesize,
+    breakatwhitespace=false,         
+    breaklines=true,                 
+    captionpos=b,                    
+    keepspaces=true,                 
+    numbers=left,                    
+    numbersep=5pt,                  
+    showspaces=false,                
+    showstringspaces=false,
+    showtabs=false,                  
+    tabsize=2
 }
+
+\lstset{style=mystyle}
 
 \title{AX.25 Integration Guide for PyFBB}
 \author{Kris Kirby, KE4AHR}
-\date{December 22, 2025}
+\date{December 25, 2025}
 
 \begin{document}
 
 \maketitle
 
-\section{Overview}
+\section{Introduction}
 
-PyFBB provides comprehensive support for AX.25 packet radio integration through multiple transport layers:
+PyFBB supports full AX.25 integration via KISS, XKISS, and AGWPE transports.
+
+\section{XKISS (Extended KISS) Modes}
+
+PyFBB implements extended KISS (XKISS) modes for multi-drop and advanced TNC control:
 
 \begin{itemize}
-  \item Direct TCP -- for local or network-based forwarding
-  \item AGWPE -- classic Windows AGW Packet Engine TCP/IP interface (port 8000)
-  \item KISS/XKISS -- over serial port or TCP
-  \item Connected-mode AX.25 -- full link layer with SABM/UA, I-frames, RR polling
+    \item \textbf{Multi-drop addressing}: TNC address in high nibble of command byte (0-15)
+    \item \textbf{Polled mode}: Master polling at 100ms interval using \$xE command
+    \item \textbf{Checksum mode}: 8-bit sum appended before FEND, validation with silent discard on mismatch
+    \item \textbf{Parameter commands}: Full support for 0x01--0x06 (TXDelay, Persistence, SlotTime, TxTail, FullDuplex, Hardware)
 \end{itemize}
 
-\section{Prerequisites}
+See examples/quick\_kiss.py for complete usage.
 
-\begin{lstlisting}[language=bash]
-pip install pyfbb
-# Optional: for serial KISS
-pip install pyserial
-\end{lstlisting}
+\section{AGWPE TCP/IP Interface}
 
-\section{AGWPE Transport}
+PyFBB supports the AGWPE TCP/IP socket interface for SoundCard TNC integration.
 
-\begin{lstlisting}[language=python]
-from pyfbb import FBBForwarder
+\begin{itemize}
+    \item \textbf{Connection}: Register with callsign on port 8000
+    \item \textbf{Frame handling}: Full AGWPE frame header support (port, kind, callsigns, data length)
+    \item \textbf{Monitoring}: Enable monitoring frames
+    \item \textbf{Multiple ports}: Select radio port for transmission
+\end{itemize}
 
-fwd = FBBForwarder(
-    my_call="KE4AHR",
-    remote_call="BBS-1",
-    transport_type="agw",
-    host="127.0.0.1",
-    port=8000
-)
-fwd.connect(remote_call="BBS-1")
-\end{lstlisting}
+See examples/quick\_agwpe.py for complete usage.
 
-\section{KISS/XKISS Transport}
+\section{Usage Examples}
 
-\begin{lstlisting}[language=python]
+\begin{lstlisting}[language=Python]
 from pyfbb.fbb.transport import KISSTransport, AX25Connection
 from pyfbb import FBBForwarder
 
-# Serial example
-kiss = KISSTransport(serial_port="/dev/ttyUSB0", baud=9600)
-ax25 = AX25Connection(kiss, "KE4AHR", "BBS-1", path=["RELAY1"])
-fwd = FBBForwarder(transport=ax25)
+kiss = KISSTransport(
+    host="127.0.0.1",
+    port=8001,
+    use_checksum=True,
+    polled_mode=True,
+    slave_addresses=[1, 2]
+)
+
+ax25 = AX25Connection(kiss, "MYCALL", "BBS")
+fwd = FBBForwarder(ax25)
 fwd.connect()
 \end{lstlisting}
 
-\section{References}
-
-\begin{itemize}
-  \item AGW TCP/IP Socket Interface (SV2AGW, 2000)
-  \item AGWPE TCP/IP API Tutorial (LU7DID/SV2AGW, 2000)
-  \item AX.25 Link Layer Protocol Specification
-\end{itemize}
+See examples/ for complete scripts.
 
 \end{document}
