@@ -1,17 +1,22 @@
-# Copyright (C) 2025-2026 Kris Kirby, KE4AHR
-# SPDX-License-Identifier: LGPL-3.0-or-later
+# setup.py
+# Legacy compatibility for PyFBB
 
-"""
-Legacy setup.py for PyFBB compatibility.
+from setuptools import setup, find_packages
 
-Note: Modern Python packaging prefers pyproject.toml (already present).
-This setup.py is provided for backward compatibility with older tools
-that require it (e.g., some editable installs or legacy workflows).
-
-It simply delegates to the build system defined in pyproject.toml.
-"""
-
-from setuptools import setup
-
-if __name__ == "__main__":
-    setup()
+setup(
+    name="pyfbb",
+    version="0.1.2",
+    description="F6FBB packet radio BBS forwarding library",
+    author="Kris Kirby, KE4AHR",
+    packages=find_packages(),
+    python_requires=">=3.8",
+    install_requires=[
+        "pyserial; platform_system != 'Windows'",
+    ],
+    classifiers=[
+        "Programming Language :: Python :: 3",
+        "License :: OSI Approved :: GNU Lesser General Public License v3 or later (LGPLv3+)",
+        "Operating System :: OS Independent",
+        "Topic :: Communications :: Ham Radio",
+    ],
+)
